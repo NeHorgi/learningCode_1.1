@@ -1,7 +1,4 @@
-from dataclasses import dataclass, field, fields
-from typing import List, Any
-
-
+from dataclasses import dataclass
 from bs4 import BeautifulSoup
 import requests
 
@@ -12,9 +9,10 @@ wiki_table = soup.table
 
 
 result = []
+company_info = []
 
 
-def getAFormatTable():
+def get_a_format_table():
 
     for num in wiki_table.find_all('tr'):
         string = []
@@ -37,5 +35,40 @@ def getAFormatTable():
     return result
 
 
+@dataclass
+class CompanyInfo:
+    name: str
+    popularity: int
+    front: str
+    back: str
+    database: str
+    notes: str
+
+
+def make_a_data_table():
+
+    data_name = 'info'
+
+    for i in range(len(result)):
+        data_name += result[i][0]
+        company_info.append(data_name)
+        data_name = 'info'
+
+    for i in range(len(company_info)):
+        company_info[i] = CompanyInfo(
+            result[i][0],
+            result[i][1],
+            result[i][2],
+            result[i][3],
+            result[i][4],
+            result[i][5]
+        )
+
+    return company_info
+
+
 if __name__ == '__main__':
-    print(getAFormatTable())
+    get_a_format_table()
+    make_a_data_table()
+    for i in company_info:
+        print(i.name, '|', i.popularity, '|', i.front, '|', i.back)
