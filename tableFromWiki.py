@@ -3,16 +3,13 @@ from bs4 import BeautifulSoup
 import requests
 
 
-url = requests.get('https://en.wikipedia.org/wiki/Programming_languages_used_in_most_popular_websites')
-soup = BeautifulSoup(url.text, "html.parser")
-wiki_table = soup.table
-
-
-result = []
-company_info = []
-
-
 def get_a_format_table():
+
+    url = requests.get('https://en.wikipedia.org/wiki/Programming_languages_used_in_most_popular_websites')
+    soup = BeautifulSoup(url.text, "html.parser")
+    wiki_table = soup.table
+
+    result = []
 
     for num in wiki_table.find_all('tr'):
         string = []
@@ -47,21 +44,23 @@ class CompanyInfo:
 
 def make_a_data_table():
 
+    company_info = []
     data_name = 'info'
+    result = get_a_format_table()
 
-    for i in range(len(result)):
-        data_name += result[i][0]
+    for _ in range(len(result)):
+        data_name += result[_][0]
         company_info.append(data_name)
         data_name = 'info'
 
-    for i in range(len(company_info)):
-        company_info[i] = CompanyInfo(
-            result[i][0],
-            result[i][1],
-            result[i][2],
-            result[i][3],
-            result[i][4],
-            result[i][5]
+    for _ in range(len(company_info)):
+        company_info[_] = CompanyInfo(
+            result[_][0],
+            result[_][1],
+            result[_][2],
+            result[_][3],
+            result[_][4],
+            result[_][5]
         )
 
     return company_info
@@ -69,6 +68,5 @@ def make_a_data_table():
 
 if __name__ == '__main__':
     get_a_format_table()
-    make_a_data_table()
-    for i in company_info:
-        print(i.name, '|', i.popularity, '|', i.front, '|', i.back)
+    for _ in make_a_data_table():
+        print(_.name, '|', _.popularity, '|', _.front, '|', _.back)
